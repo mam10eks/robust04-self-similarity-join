@@ -1,4 +1,4 @@
-import os, sys
+import sys
 sys.path += ['thirdparty/anserini/src/main/python']
 from pyserini.collection import pycollection
 from pyserini.pyclass import JCollections
@@ -15,6 +15,20 @@ def documents_in_trec_jsoup_collection(directory):
             ret = generator.create_document(doc)
             if ret is not None:
                 yield ret
+
+
+def transform_documents(dir):
+    ret = [__map_parsed_document(i) for i in documents_in_trec_jsoup_collection(dir)]
+
+    return ret
+
+
+def __map_parsed_document(document):
+    return {
+        'docid': document.get('id'),
+        'raw': document.get('raw'),
+        'contents': document.get('contents')
+    }
 
 
 if __name__ == '__main__':
