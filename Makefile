@@ -1,13 +1,19 @@
-PIP = .venv/bin/pip2
-PYTHON = .venv/bin/python
+PIP = .venv/bin/pip3
+PYTHON = .venv/bin/python3
 
 
-pip-install:
+create-document-vectors:
+	$(PYTHON) collection_to_doc_vectors/collection_to_doc_vectors.py
+
+pip-install: checkout-submodules
 	@rm -Rf .venv &&\
-	pip2 install --user virtualenv &&\
-	virtualenv -p python2 .venv &&\
+	python3 -m venv .venv &&\
 	$(PIP) install --upgrade pip &&\
 	$(PIP) install Cython &&\
 	$(PIP) install spacy pyjnius &&\
-	$(PYTHON) -m spacy download en_core_web_lg
+	$(PYTHON) -m spacy download en_core_web_lg &&\
+	mvn -f thirdparty/anserini clean package appassembler:assemble -DskipTests
+
+checkout-submodules:
+	@git submodule update --init --recursive
 
