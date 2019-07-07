@@ -1,5 +1,6 @@
 import sys
 sys.path += ['thirdparty/anserini/src/main/python']
+import spacy
 from pyserini.collection import pycollection
 from pyserini.pyclass import JCollections
 from pyserini.index import pygenerator
@@ -32,14 +33,16 @@ def transform_documents(config):
 
 
 def __map_parsed_document(config):
-    content_extractor = __content_extractor(config)
+    content_extractor = __main_content_extractor(config)
+    content_extractor = __to_word_vectors(config, content_extractor)
+
     return lambda document: {
         'docid': document.get('id'),
         'content': content_extractor(document)
     }
 
 
-def __content_extractor(config):
+def __main_content_extractor(config):
     if 'extract_main_content' in config and config['extract_main_content']:
         return lambda document: subprocess.check_output([
             '.venv/bin/python3', 'collection_to_doc_vectors/main_content_extraction.py'
@@ -47,6 +50,13 @@ def __content_extractor(config):
 
     return lambda document: document.get('raw')
 
+
+def __to_word_vectors(config, function):
+    if 'transform_to_word_vectors' in config and config['transform_to_word_vectors']:
+        nlp = spacy.load('en_core_web_lg')
+        return lambda document: nlp(function(document)).vector.tolist()
+
+    return lambda document: function(document)
 
 def __write_to_file(target_file, transformed_documents):
     with open(target_file, 'w+') as target:

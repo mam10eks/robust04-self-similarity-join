@@ -32,7 +32,8 @@ class TestDocumentTransformationOnTrecRobust04Sample(unittest.TestCase):
     def test_transformation_to_word_vectors(self):
         transformed_document_sample = self.transform_documents_and_select_entries_by_id({
             'collection_directory': 'collection_to_doc_vectors/test/data/robust',
-            'ids': LA_TIMES_SAMPLE
+            'ids': LA_TIMES_SAMPLE,
+            'transform_to_word_vectors': True
         })
 
         verify_as_json(transformed_document_sample)
