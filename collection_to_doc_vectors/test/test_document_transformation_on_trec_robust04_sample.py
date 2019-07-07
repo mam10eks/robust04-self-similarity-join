@@ -23,19 +23,33 @@ class TestDocumentTransformationOnTrecRobust04Sample(unittest.TestCase):
 
     def test_no_transformation(self):
         transformed_document_sample = self.transform_documents_and_select_entries_by_id({
-            'test_directory': '../test/data/robust',
+            'collection_directory': 'collection_to_doc_vectors/test/data/robust',
             'ids': LA_TIMES_SAMPLE
+        })
+
+        verify_as_json(transformed_document_sample)
+
+    def test_transformation_to_word_vectors(self):
+        transformed_document_sample = self.transform_documents_and_select_entries_by_id({
+            'collection_directory': 'collection_to_doc_vectors/test/data/robust',
+            'ids': LA_TIMES_SAMPLE
+        })
+
+        verify_as_json(transformed_document_sample)
+
+    def test_with_main_content_extraction(self):
+        transformed_document_sample = self.transform_documents_and_select_entries_by_id({
+            'collection_directory': 'collection_to_doc_vectors/test/data/robust',
+            'ids': LA_TIMES_SAMPLE,
+            'extract_main_content': True
         })
 
         verify_as_json(transformed_document_sample)
 
     @staticmethod
     def transform_documents_and_select_entries_by_id(conf):
-        transform_documents({
-            'collection_directory': conf['test_directory'],
-            'output_file': OUTPUT_FILE
-        })
-
+        conf['output_file'] = OUTPUT_FILE
+        transform_documents(conf)
         ret = []
 
         with open(OUTPUT_FILE, 'r') as file:

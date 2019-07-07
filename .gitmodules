@@ -1,3 +1,6 @@
 [submodule "thirdparty/anserini"]
 	path = thirdparty/anserini
 	url = https://github.com/castorini/anserini.git
+[submodule "thirdparty/python-poilerpipe"]
+	path = thirdparty/python-poilerpipe
+	url = https://github.com/misja/python-boilerpipe.git
