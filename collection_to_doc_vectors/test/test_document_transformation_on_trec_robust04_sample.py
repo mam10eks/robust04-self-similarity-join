@@ -47,6 +47,16 @@ class TestDocumentTransformationOnTrecRobust04Sample(unittest.TestCase):
 
         verify_as_json(transformed_document_sample)
 
+    def test_with_main_content_extraction_and_word_vectors(self):
+        transformed_document_sample = self.transform_documents_and_select_entries_by_id({
+            'collection_directory': 'collection_to_doc_vectors/test/data/robust',
+            'ids': LA_TIMES_SAMPLE,
+            'extract_main_content': True,
+            'transform_to_word_vectors': True
+        })
+
+        verify_as_json(transformed_document_sample)
+
     @staticmethod
     def transform_documents_and_select_entries_by_id(conf):
         conf['output_file'] = OUTPUT_FILE

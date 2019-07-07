@@ -58,6 +58,7 @@ def __to_word_vectors(config, function):
 
     return lambda document: function(document)
 
+
 def __write_to_file(target_file, transformed_documents):
     with open(target_file, 'w+') as target:
         for transformed_document in transformed_documents:
