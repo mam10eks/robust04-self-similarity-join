@@ -36,7 +36,7 @@ class TestSampleCollectionsAreParsable(unittest.TestCase):
                 sample=LA_TIMES_SAMPLE
             )
         )
-        
+
         verify_as_json(transformed_document_sample)
 
     @staticmethod
