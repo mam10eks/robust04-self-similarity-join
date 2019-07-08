@@ -4,3 +4,7 @@ data/
 __pycache__
 clueweb09-main-content-word-vectors.jsonl
 robust-main-content-word-vectors.jsonl
+.classpath
+.gitignore
+.project
+.settings

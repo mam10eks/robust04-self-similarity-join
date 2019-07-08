@@ -33,7 +33,8 @@ install: checkout-submodules
 	$(PIP) install spacy pyjnius approvaltests nose &&\
 	$(PIP) install thirdparty/python-poilerpipe/ &&\
 	$(PYTHON) -m spacy download en_core_web_lg &&\
-	mvn -f thirdparty/anserini clean package appassembler:assemble -DskipTests
+	mvn -f thirdparty/anserini clean package appassembler:assemble -DskipTests &&\
+	mvn -f trec-ndd install
 
 checkout-submodules:
 	@git submodule update --init --recursive
