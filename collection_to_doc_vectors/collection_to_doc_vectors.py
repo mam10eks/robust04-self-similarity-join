@@ -113,7 +113,17 @@ def __argument_parser():
         type=str,
     )
 
+    ret.add_argument(
+        '--output_file',
+        help='TBD;)',
+        required=True,
+        type=str,
+    )
+
+    return ret
+
 
 if __name__ == '__main__':
     args = __argument_parser().parse_args()
-    transform_documents(args)
+    transform_documents(vars(args))
+
