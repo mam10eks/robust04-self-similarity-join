@@ -9,20 +9,30 @@ import json
 from tqdm import tqdm
 
 
-def documents_in_trec_jsoup_collection(directory):
-    collection = pycollection.Collection('TrecCollection', directory)
-    generator = pygenerator.Generator('JsoupGenerator')
+def __documents_in_collection(config):
+    collection = pycollection.Collection(config['pyserini_collection'], config['collection_directory'])
+    generator = pygenerator.Generator(config['pyserini_generator'])
 
     for (_, fs) in enumerate(collection):
         for (_, document) in enumerate(fs):
+            if not __document_is_parsable(document):
+                continue
+
             ret = generator.create_document(document)
             if ret is not None:
                 yield ret
 
 
+def __document_is_parsable(document):
+    return not hasattr(document, 'object') \
+           or not hasattr(document.object, 'indexable') \
+           or document.object.indexable()
+
+
+
 def transform_documents(config):
     document_transformer = __map_parsed_document(config)
-    documents = [i for i in documents_in_trec_jsoup_collection(config['collection_directory'])]
+    documents = [i for i in __documents_in_collection(config)]
     ret = [document_transformer(i) for i in documents]
     __write_to_file(
         target_file=config['output_file'],
