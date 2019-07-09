@@ -4,3 +4,6 @@
 [submodule "thirdparty/python-poilerpipe"]
 	path = thirdparty/python-poilerpipe
 	url = https://github.com/misja/python-boilerpipe.git
+[submodule "thirdparty/scanns"]
+	path = thirdparty/scanns
+	url = https://github.com/linkedin/scanns

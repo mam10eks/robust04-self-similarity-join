@@ -43,6 +43,16 @@
 			<version>2.4.3_0.12.0</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.linkedin</groupId>
+			<artifactId>scanns</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.soundcloud</groupId>
+			<artifactId>cosine-lsh-join-spark_2.11</artifactId>
+			<version>1.0.6</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -91,4 +101,10 @@
 			</plugins>
 		</pluginManagement>
 	</build>
+	<repositories>
+		<repository>
+			<id>project-local-repo</id>
+			<url>file://${project.basedir}${file.separator}lib${file.separator}</url>
+		</repository>
+	</repositories>
 </project>

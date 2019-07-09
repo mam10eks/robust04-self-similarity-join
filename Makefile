@@ -2,6 +2,15 @@ PIP = .venv/bin/pip3
 PYTHON = .venv/bin/python3
 
 
+put-example-input-to-hdfs:
+	rm -f tmp-file &&\
+	cat robust-main-content-word-vectors.jsonl > tmp-file &&\
+	cat clueweb09-main-content-word-vectors.jsonl >> tmp-file &&\
+	hdfs dfs -rm -f /user/kibi9872/document-vectors.jsonl &&\
+	hdfs dfs -rm -f /user/kibi9872/ndd-similarities.txt &&\
+	hdfs dfs -put tmp-file /user/kibi9872/document-vectors.jsonl
+
+
 create-robust-document-vectors:
 	$(PYTHON) collection_to_doc_vectors/collection_to_doc_vectors.py \
 		--transform_to_word_vectors True\
@@ -34,7 +43,8 @@ install: checkout-submodules
 	$(PIP) install thirdparty/python-poilerpipe/ &&\
 	$(PYTHON) -m spacy download en_core_web_lg &&\
 	mvn -f thirdparty/anserini clean package appassembler:assemble -DskipTests &&\
-	mvn -f trec-ndd install
+	mvn -f trec-ndd install &&\
+	./thirdparty/scanns/gradlew build -p thirdparty/scanns
 
 checkout-submodules:
 	@git submodule update --init --recursive
