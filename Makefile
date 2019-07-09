@@ -4,11 +4,14 @@ PYTHON = .venv/bin/python3
 
 put-example-input-to-hdfs:
 	rm -f tmp-file &&\
+	mvn -f trec-ndd install &&\
 	cat robust-main-content-word-vectors.jsonl > tmp-file &&\
 	cat clueweb09-main-content-word-vectors.jsonl >> tmp-file &&\
 	hdfs dfs -rm -f /user/kibi9872/document-vectors.jsonl &&\
 	hdfs dfs -rm -f /user/kibi9872/ndd-similarities.txt &&\
-	hdfs dfs -put tmp-file /user/kibi9872/document-vectors.jsonl
+	hdfs dfs -put tmp-file /user/kibi872/document-vectors.jsonl &&\
+	scp trec-ndd/target/trec-ndd-1.0-SNAPSHOT.jar kibi9872@webis17.medien.uni-weimar.de:trec-ndd.jar
+
 
 
 create-robust-document-vectors:
