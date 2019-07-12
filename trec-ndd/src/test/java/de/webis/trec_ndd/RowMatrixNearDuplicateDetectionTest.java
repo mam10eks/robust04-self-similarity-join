@@ -11,7 +11,6 @@ import org.junit.Test;
 import com.holdenkarau.spark.testing.JavaRDDComparisons;
 import com.holdenkarau.spark.testing.SharedJavaSparkContext;
 
-import scala.Tuple2;
 import scala.Tuple3;
 
 public class RowMatrixNearDuplicateDetectionTest extends SharedJavaSparkContext {

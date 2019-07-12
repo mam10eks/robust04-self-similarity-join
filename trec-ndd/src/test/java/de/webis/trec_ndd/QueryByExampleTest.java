@@ -1,8 +1,24 @@
 package de.webis.trec_ndd;
 
 import org.approvaltests.Approvals;
+import org.junit.Assert;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Matchers;
+import org.mockito.Mockito;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+import org.netspeak.application.generated.NetspeakMessages.Response;
+import org.netspeak.client.Netspeak;
+import org.netspeak.client.Request;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import lombok.SneakyThrows;
+
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Netspeak.class, WordCounts.class, Response.class})
 public class QueryByExampleTest {
 	@Test
 	public void approveQueryByExampleForSmallExample() {
@@ -34,5 +50,110 @@ public class QueryByExampleTest {
 		String actual = QueryByExample.esQueryByExample(input);
 		
 		Approvals.verify(actual);
+	}
+	
+	@SneakyThrows
+	private static void mockNetSpeak() {
+		Netspeak netspeak = Mockito.mock(Netspeak.class);
+		Mockito.when(netspeak.search(Matchers.any())).then(new Answer<Response>() {
+			@Override
+			public Response answer(InvocationOnMock invocation) throws Throwable {
+				Response ret = PowerMockito.mock(Response.class);
+				String query = ((Request) invocation.getArguments()[0]).get(Request.QUERY);
+				long totalFrequency = 0;
+				
+				if("hello".equals(query)) {
+					totalFrequency = 1;
+				} else if ("world".equals(query)) {
+					totalFrequency = 2;
+				} else if ("cat".equals(query)) {
+					totalFrequency = 3;
+				} else if ("dog".equals(query)) {
+					totalFrequency = 4;
+				} else if ("horse".equals(query)) {
+					totalFrequency = 5;
+				} else if ("pig".equals(query)) {
+					totalFrequency = 6;
+				}
+				
+				Mockito.when(ret.getTotalFrequency())
+					.thenReturn(totalFrequency);
+				
+				return ret;
+			}
+		});
+		
+		PowerMockito.whenNew(Netspeak.class).withAnyArguments()
+			.thenReturn(netspeak);
+	}
+	
+	@Test
+	public void checkMedianWordCountQueryForShortQueryAndK1() {
+		mockNetSpeak();
+		String document = "geld HoRse cAt";
+		String expected = "(body_lang.en: \"cat\")";
+		String actual = QueryByExample.esQueryByExampleWithKMedianTokens(document, 1);
+		
+		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void checkMedianWordCountQueryForShortQueryAndK2() {
+		mockNetSpeak();
+		String document = "geld HoRse cAt";
+		String expected = "(body_lang.en: \"horse\") OR (body_lang.en: \"cat\")";
+		String actual = QueryByExample.esQueryByExampleWithKMedianTokens(document, 2);
+		
+		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void checkMedianWordCountQueryForShortQueryAndK3() {
+		mockNetSpeak();
+		String document = "geld HoRse cAt";
+		String expected = "(body_lang.en: \"horse\") OR (body_lang.en: \"geld\") OR (body_lang.en: \"cat\")";
+		String actual = QueryByExample.esQueryByExampleWithKMedianTokens(document, 3);
+		
+		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void checkMedianWordCountQueryForShortQueryAndK10() {
+		mockNetSpeak();
+		String document = "geld HoRse cAt";
+		String expected = "(body_lang.en: \"horse\") OR (body_lang.en: \"geld\") OR (body_lang.en: \"cat\")";
+		String actual = QueryByExample.esQueryByExampleWithKMedianTokens(document, 10);
+		
+		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void checkMedianWordCountQueryForMediumQueryAndK1() {
+		mockNetSpeak();
+		String document = "geld Dog dog cat pig Cat Pig pIg horse wodl wosl world";
+		String expected = "(body_lang.en: \"cat\")";
+		String actual = QueryByExample.esQueryByExampleWithKMedianTokens(document, 1);
+		
+		Assert.assertEquals(expected, actual);
+	}
+
+	@Test
+	public void checkMedianWordCountQueryForMediumQueryAndK2() {
+		mockNetSpeak();
+		String document = "geld Dog dog cat pig Cat Pig pIg horse wodl wosl world";
+		String expected = "(body_lang.en: \"world\") OR (body_lang.en: \"cat\")";
+		String actual = QueryByExample.esQueryByExampleWithKMedianTokens(document, 2);
+		
+		Assert.assertEquals(expected, actual);
+	}
+	
+	@Test
+	public void checkMedianWordCountQueryForMediumQueryAndK3() {
+		mockNetSpeak();
+		String document = "geld Dog dog cat pig Cat Pig pIg horse wodl wosl world";
+		String expected = "(body_lang.en: \"world\") OR (body_lang.en: \"cat\") OR (body_lang.en: \"dog\")";
+		String actual = QueryByExample.esQueryByExampleWithKMedianTokens(document, 3);
+		
+		Assert.assertEquals(expected, actual);
 	}
 }
