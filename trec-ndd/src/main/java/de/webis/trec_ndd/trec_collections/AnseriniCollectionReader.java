@@ -4,7 +4,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -14,7 +13,6 @@ import io.anserini.collection.DocumentCollection;
 import io.anserini.collection.Segment;
 import io.anserini.collection.SegmentProvider;
 import io.anserini.collection.SourceDocument;
-import io.anserini.eval.QueryJudgments;
 import io.anserini.index.IndexCollection;
 import io.anserini.index.IndexCollection.Args;
 import io.anserini.index.IndexCollection.Counters;
