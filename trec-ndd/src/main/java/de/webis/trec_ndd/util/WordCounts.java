@@ -1,4 +1,4 @@
-package de.webis.trec_ndd;
+package de.webis.trec_ndd.util;
 
 import java.io.IOException;
 import java.time.temporal.ChronoUnit;
@@ -17,6 +17,8 @@ import net.jodah.failsafe.RetryPolicy;
 
 @UtilityClass
 public class WordCounts {
+	private static final String NETSPEAK_API = "https://api.netspeak.org/netspeak3/search?";
+	
 	public static RetryPolicy<Long> retryPolicy = new RetryPolicy<Long>()
 			  .handle(Exception.class)
 			  .withBackoff(5, 180, ChronoUnit.SECONDS)
@@ -39,6 +41,7 @@ public class WordCounts {
 		Request request = new Request();
 		request.put(Request.QUERY, word);
 		
-		return new Netspeak().search(request).getTotalFrequency();
+		return new Netspeak(NETSPEAK_API)
+				.search(request).getTotalFrequency();
 	}
 }

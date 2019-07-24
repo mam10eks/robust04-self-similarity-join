@@ -1,5 +1,6 @@
 package de.webis.trec_ndd.trec_collections;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.stream.Collectors;
 import org.apache.lucene.document.Document;
 
 import io.anserini.collection.DocumentCollection;
-import io.anserini.collection.FileSegment;
+import io.anserini.collection.Segment;
+import io.anserini.collection.SegmentProvider;
 import io.anserini.collection.SourceDocument;
 import io.anserini.eval.QueryJudgments;
 import io.anserini.index.IndexCollection;
@@ -42,10 +44,14 @@ public class AnseriniCollectionReader<T extends SourceDocument> implements Colle
 	public List<Document> extractRawDocumentsFromCollection() {
 		List<Document> ret = new LinkedList<>();
 		LuceneDocumentGenerator<T> generator = documentGenerator();
-		DocumentCollection<T> collection = documentCollection();
+		SegmentProvider<T> collection = documentCollection();
 
-		for (FileSegment<T> segment : collection) {
-			for (T document : segment) {
+		for (Path segmentPath : collection.getFileSegmentPaths()) {
+			Segment<T> segment = collection.createFileSegment(segmentPath);
+			
+			while(segment.hasNext()) {
+				T document = segment.next();
+			
 				if (!document.indexable()) {
 					continue;
 				}
@@ -55,8 +61,6 @@ public class AnseriniCollectionReader<T extends SourceDocument> implements Colle
 					ret.add(doc);
 				}
 			}
-
-			segment.close();
 		}
 
 		return ret;
@@ -64,9 +68,9 @@ public class AnseriniCollectionReader<T extends SourceDocument> implements Colle
 
 	@SneakyThrows
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private DocumentCollection<T> documentCollection() {
-		DocumentCollection ret = (DocumentCollection) Class.forName("io.anserini.collection." + args().collectionClass).newInstance();
-		ret.setCollectionPath(Paths.get(pathToCollection));
+	private SegmentProvider<T> documentCollection() {
+		SegmentProvider<T> ret = (SegmentProvider) Class.forName("io.anserini.collection." + args().collectionClass).newInstance();
+		((DocumentCollection)ret).setCollectionPath(Paths.get(pathToCollection));
 		
 		return ret;
 	}

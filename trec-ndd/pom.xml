@@ -10,8 +10,6 @@
 	<version>1.0-SNAPSHOT</version>
 
 	<name>trec-ndd</name>
-	<!-- FIXME change it to the project's website -->
-	<url>http://www.example.com</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -21,29 +19,20 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>io.anserini</groupId>
-			<artifactId>anserini</artifactId>
-			<version>0.6.0-SNAPSHOT</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.dataformat</groupId>
-					<artifactId>jackson-dataformat-yaml</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>com.fasterxml.jackson.datatype</groupId>
-					<artifactId>jackson-datatype-jdk8</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.26</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.11</artifactId>
-			<version>2.4.3</version>
+			<groupId>com.jayway.jsonpath</groupId>
+			<artifactId>json-path</artifactId>
+			<version>2.4.0</version>
+		</dependency>
 
+		<dependency>
+			<groupId>io.anserini</groupId>
+			<artifactId>anserini</artifactId>
+			<version>0.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
@@ -52,37 +41,30 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.elasticsearch.client</groupId>
+			<artifactId>elasticsearch-rest-client</artifactId>
+			<version>6.7.1</version>
+		</dependency>
+		<dependency>
 			<groupId>client.netspeak</groupId>
 			<artifactId>netspeak-client</artifactId>
 			<version>1.3.5</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-mllib_2.11</artifactId>
-			<version>2.4.3</version>
-			<scope>provided</scope>
+			<groupId>net.jodah</groupId>
+			<artifactId>failsafe</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.solr</groupId>
+			<artifactId>solr-core</artifactId>
+			<version>8.1.1</version>
 			<exclusions>
 				<exclusion>
-					<groupId>com.fasterxml.jackson.core</groupId>
-					<artifactId>jackson-databind</artifactId>
+					<groupId>com.jayway.jsonpath</groupId>
+					<artifactId>json-path</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.holdenkarau</groupId>
-			<artifactId>spark-testing-base_2.11</artifactId>
-			<version>2.4.3_0.12.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.linkedin</groupId>
-			<artifactId>scanns</artifactId>
-			<version>1.0.0</version>
-		</dependency>
-		<dependency>
-			<groupId>com.soundcloud</groupId>
-			<artifactId>cosine-lsh-join-spark_2.11</artifactId>
-			<version>1.0.6</version>
 		</dependency>
 
 		<dependency>
@@ -116,14 +98,10 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>net.jodah</groupId>
-			<artifactId>failsafe</artifactId>
-			<version>2.0.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.solr</groupId>
-			<artifactId>solr-core</artifactId>
-			<version>8.1.1</version>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.8.5</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

@@ -1,4 +1,4 @@
-package de.webis.trec_ndd;
+package de.webis.trec_ndd.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,11 +11,13 @@ import java.util.stream.Collectors;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.TokenStream;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 
-public class QueryByExample {	
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class QueryByExampleBuilder {
 	public static String esQueryByExample(String document){
 		return esOrQuery(tokensInText(document));
 	}
@@ -39,7 +41,7 @@ public class QueryByExample {
 	}
 
 	private static Set<String> tokensInText(String text) {
-		try (Analyzer analyzer = new StandardAnalyzer(EnglishAnalyzer.ENGLISH_STOP_WORDS_SET)) {
+		try (Analyzer analyzer = new StandardAnalyzer()) {
 			return tokensInText(analyzer, text);
 		} catch (IOException e) {
 			throw new RuntimeException(e);

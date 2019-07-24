@@ -1,4 +1,4 @@
-package de.webis.trec_ndd;
+package de.webis.trec_ndd.similarity;
 
 public interface TextSimilarity {
 

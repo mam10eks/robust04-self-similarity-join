@@ -1,7 +1,10 @@
-package de.webis.trec_ndd;
+package de.webis.trec_ndd.similarity;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import de.webis.trec_ndd.similarity.TextProfileSignatureSimilarity;
+import de.webis.trec_ndd.similarity.TextSimilarity;
 
 public class TextProfileSignatureSimilarityTest {
 	private static final String EXAMPLE_A = "Hello World ac ad Test";
