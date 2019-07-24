@@ -67,6 +67,11 @@ public class AnseriniCollectionReader<T extends SourceDocument> implements Colle
 	}
 
 	@SneakyThrows
+	private Set<String> judgedDocumentIds() {
+		return new QrelReader().readJudgedDocumentIdsFromQrelsFile(pathToQrels);
+	}
+	
+	@SneakyThrows
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private SegmentProvider<T> documentCollection() {
 		SegmentProvider<T> ret = (SegmentProvider) Class.forName("io.anserini.collection." + args().collectionClass).newInstance();
@@ -85,14 +90,7 @@ public class AnseriniCollectionReader<T extends SourceDocument> implements Colle
 				new IndexCollection(args).new Counters());
 	}
 	
-	@SneakyThrows
-	private Set<String> judgedDocumentIds() {
-		return new QueryJudgments(pathToQrels)
-				.getQrels().values().stream()
-				.map(Map::keySet)
-				.flatMap(Set::stream)
-				.collect(Collectors.toSet());
-	}
+
 
 	private Args args() {
 		Args ret = new Args();
